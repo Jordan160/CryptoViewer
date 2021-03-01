@@ -1,74 +1,132 @@
 package com.jvetter.cryptoviewer;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
+import com.google.gson.Gson;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.TableColumn;
+import javafx.scene.chart.*;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
-import javafx.util.Callback;
-import javafx.util.Duration;
+import javafx.scene.layout.VBox;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
 
 public class Controller {
     public final int ITEMS_AMT = 10;
     public BarChart chart;
+    private final String CRYPTO_DAY_URL = "https://min-api.cryptocompare.com/data/histoday?aggregate=1&e=CCCAGG&extraParams=CryptoCompare&fsym=BTC&limit=10&tryConversion=false&tsym=USD";
+    private final String CRYPTO_HOUR_URL = "https://min-api.cryptocompare.com/data/histohour?aggregate=1&e=CCCAGG&extraParams=CryptoCompare&fsym=BTC&limit=10&tryConversion=false&tsym=USD";
+    private final String CRYPTO_MIN_URL = "https://min-api.cryptocompare.com/data/histominute?aggregate=1&e=CCCAGG&extraParams=CryptoCompare&fsym=BTC&limit=10&tryConversion=false&tsym=USD";
+    private final String DAY_PATTERN = "MM/dd";
+    private final String HOUR_PATTERN = "K:mm";
 
     @FXML
     ToggleGroup toggleGroup;
 
     @FXML
-    private void buttonClicked() {
-        if (toggleGroup.getSelectedToggle() != null) {
-            System.out.println(toggleGroup.getSelectedToggle());
-        }
-    }
-//
-//    public void initialize(URL location, ResourceBundle resources) {
-//        XYChart.Series<String, Double> series = new XYChart.Series<>();
-//        Random rnd = new Random();
-//        for (int i=0; i<this.ITEMS_AMT; i++){
-//            Double value = new Double(rnd.nextDouble());
-//            XYChart.Data<String, Double> item = new XYChart.Data<String,
-//                    Double>( Integer.toString(i), value);
-//            series.getData().add(item);
-//        }
-//
-//        chart = new BarChart();
-//        chart.getData().add(series);
-//        TableColumn col = new TableColumn("Value");
-//        col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures,
-//                        ObservableValue>() {
-//            @Override
-//            public ObservableValue call(TableColumn.CellDataFeatures param) {
-//                XYChart.Data d = (XYChart.Data) param.getValue();
-//                return new SimpleDoubleProperty((Double)d.getYValue());
-//            }
-//        });
-//
-//    }
-//    @FXML
-//    ToggleButton myButton;
-//    private void selectButton() {
-//        //event.getTarget();
-//    }
+    LineChart lineChart;
 
-//    @FXML
-//    private void handleClick(MouseEvent event) {
-//        System.out.println(event.getButton());
-//        System.out.println(event.getX());
-//        System.out.println(event.getY());
-//    }
+    @FXML
+    VBox chartVBox; // assuming your button container is a HBox
+
+    @FXML
+    ToggleButton myButton;
+    private void selectButton() {
+        //event.getTarget();
+    }
+
+    @FXML
+    private void handleClick(MouseEvent event) {
+        System.out.println(event.getButton());
+        System.out.println(event.getX());
+        System.out.println(event.getY());
+    }
+
+    @FXML
+    private void dayButtonClicked() {
+        lineChart.getData().clear();
+        populateChart(CRYPTO_DAY_URL, DAY_PATTERN);
+    }
+
+    @FXML
+    private void hourButtonClicked() {
+        lineChart.getData().clear();
+        populateChart(CRYPTO_HOUR_URL, HOUR_PATTERN);
+    }
+
+    @FXML
+    private void minButtonClicked() {
+        lineChart.getData().clear();
+        populateChart(CRYPTO_MIN_URL, HOUR_PATTERN);
+    }
+
+    private String retrieveUrlResponse(String url) {
+        System.out.println("Calling GET API from URL: " + url);
+        URL address = null;
+        try {
+            address = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        InputStreamReader reader = null;
+        try {
+            reader = new InputStreamReader(address.openStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        BufferedReader buffer = new BufferedReader(reader);
+        String contents = "";
+        String line = "";
+        while (true) {
+            try {
+                if (!((line = buffer.readLine()) != null)) break;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (line.length() == 0) {
+                break;
+            }
+            contents += line;
+        }
+
+        return contents;
+    }
+
+    private void populateChart(String url, String pattern) {
+        String response = retrieveUrlResponse(url);
+
+        Gson gson = new Gson();
+        CryptoResponse cryptoResponse = gson.fromJson(response, CryptoResponse.class);
+        cryptoResponse.getCryptoDataList();
+
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final LineChart<String, Number> bc = new LineChart<String, Number>(xAxis, yAxis);
+        XYChart.Series cryptoSeries = new XYChart.Series();
+        lineChart.setLegendVisible(false);
+        cryptoSeries.nameProperty().setValue(null);
+        for (CryptoData cryptoData : cryptoResponse.getCryptoDataList()) {
+            Instant instant = Instant.ofEpochSecond(cryptoData.getTime());
+            Date date = Date.from(instant);
+            SimpleDateFormat dateFormatter = new SimpleDateFormat(pattern);
+            String formattedDate = dateFormatter.format(date);
+
+            cryptoSeries.getData().add(new XYChart.Data(formattedDate, cryptoData.getLowPrice()));
+        }
+
+        lineChart.getData().addAll(cryptoSeries);
+        lineChart.setVisible(true);
+    }
+
+    public void initialize() {
+        populateChart(CRYPTO_DAY_URL, DAY_PATTERN);
+    }
 }
