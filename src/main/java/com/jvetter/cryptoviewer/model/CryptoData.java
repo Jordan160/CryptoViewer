@@ -1,4 +1,4 @@
-package com.jvetter.cryptoviewer;
+package com.jvetter.cryptoviewer.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -108,17 +108,3 @@ public class CryptoData {
         return formattedDate;
     }
 }
-
-
-
-
-
-//        time : 1614011280
-//        close : 53515.52
-//        high : 53520.41
-//        low : 53436.38
-//        open : 53519.88
-//        volumefrom : 101.51
-//        volumeto : 5428385.04
-//        conversionType : "direct"
-//        conversionSymbol : ""

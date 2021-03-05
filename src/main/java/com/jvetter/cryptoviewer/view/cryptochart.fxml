@@ -11,33 +11,29 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.chart.CategoryAxis?>
-<HBox id="parentHBox" alignment="center" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jvetter.cryptoviewer.Controller">
+<HBox id="parentHBox" alignment="center" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="525.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jvetter.cryptoviewer.controller.CryptoController">
    <children>
       <VBox fx:id="chartVBox" id="chartVBox" alignment="center" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
          <children>
             <HBox alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="500.0">
                <Label fx:id="currentPriceLabel" alignment="TOP_LEFT" prefWidth="100" text="Current Price">
                   <HBox.margin>
-                     <Insets left="0.0" right="0.0" top="10.0" />
-                  </HBox.margin></Label>
-               <Label fx:id="linePointGraphPrice" alignment="TOP_LEFT" prefWidth="150" prefHeight="120" text="Closing: $50,000">
-                  <HBox.margin>
-                     <Insets left="0.0" right="50.0" top="10.0" bottom="00.0" />
+                     <Insets left="60.0" right="100.0" top="50.0" />
                   </HBox.margin></Label>
                <ToggleButton id="myButton" mnemonicParsing="false" onMouseClicked="#dayButtonClicked" prefWidth="75.0" text="Day">
                   <toggleGroup>
                      <ToggleGroup fx:id="toggleGroup" />
                   </toggleGroup>
                   <HBox.margin>
-                     <Insets top="20.0" />
+                     <Insets top="50.0" />
                   </HBox.margin></ToggleButton>
                <ToggleButton mnemonicParsing="false" onMouseClicked="#hourButtonClicked" prefWidth="75.0" text="Hour" toggleGroup="$toggleGroup">
                   <HBox.margin>
-                     <Insets top="20.0" />
+                     <Insets top="50.0" />
                   </HBox.margin></ToggleButton>
                <ToggleButton mnemonicParsing="false" onMouseClicked="#minButtonClicked" prefWidth="75.0" text="Min" toggleGroup="$toggleGroup">
                   <HBox.margin>
-                     <Insets top="20.0" />
+                     <Insets top="50" />
                   </HBox.margin></ToggleButton>
             </HBox>
 
