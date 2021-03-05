@@ -2,6 +2,10 @@ package com.jvetter.cryptoviewer;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Date;
+
 public class CryptoData {
     @SerializedName("time")
     private long time;
@@ -92,6 +96,16 @@ public class CryptoData {
 
     public void setConversionSymbol(String conversionSymbol) {
         this.conversionSymbol = conversionSymbol;
+    }
+
+    public static String getFormattedTime(long time, String pattern) {
+        Instant instant = Instant.ofEpochSecond(time);
+        Date date = Date.from(instant);
+        SimpleDateFormat dateFormatter = new SimpleDateFormat(pattern);
+        String formattedDate = dateFormatter.format(date);
+        formattedDate = formattedDate.equalsIgnoreCase("0:00") ? "12:00" : formattedDate;
+
+        return formattedDate;
     }
 }
 

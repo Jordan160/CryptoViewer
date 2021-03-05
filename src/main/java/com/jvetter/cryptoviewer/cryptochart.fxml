@@ -16,9 +16,13 @@
       <VBox fx:id="chartVBox" id="chartVBox" alignment="center" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
          <children>
             <HBox alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="500.0">
-               <Label id="currentPriceLabel" alignment="TOP_LEFT" prefWidth="100" text="Current Price">
+               <Label fx:id="currentPriceLabel" alignment="TOP_LEFT" prefWidth="100" text="Current Price">
                   <HBox.margin>
-                     <Insets left="20.0" right="145.0" top="20.0" />
+                     <Insets left="0.0" right="0.0" top="10.0" />
+                  </HBox.margin></Label>
+               <Label fx:id="linePointGraphPrice" alignment="TOP_LEFT" prefWidth="150" prefHeight="120" text="Closing: $50,000">
+                  <HBox.margin>
+                     <Insets left="0.0" right="50.0" top="10.0" bottom="00.0" />
                   </HBox.margin></Label>
                <ToggleButton id="myButton" mnemonicParsing="false" onMouseClicked="#dayButtonClicked" prefWidth="75.0" text="Day">
                   <toggleGroup>
@@ -39,7 +43,7 @@
 
                   <AnchorPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" >
                      <children>
-                        <LineChart fx:id="lineChart" prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <LineChart fx:id="lineChart" xAxis="CategoryAxis" yAxis="NumberAxis" prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <xAxis>
                               <CategoryAxis side="BOTTOM" />
                            </xAxis>
@@ -51,17 +55,5 @@
                   </AnchorPane>
          </children>
       </VBox>
-      <!--      <AnchorPane xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" >-->
-      <!--         <children>-->
-      <!--            <LineChart fx:id="lineChart" prefHeight="400.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">-->
-      <!--               <xAxis>-->
-      <!--                  <NumberAxis side="BOTTOM" />-->
-      <!--               </xAxis>-->
-      <!--               <yAxis>-->
-      <!--                  <NumberAxis side="LEFT" />-->
-      <!--               </yAxis>-->
-      <!--            </LineChart>-->
-      <!--         </children>-->
-      <!--      </AnchorPane>-->
    </children>
 </HBox>
